@@ -1,0 +1,85 @@
+.sideNavbarMain {
+    display: flex;
+    transition: all 0.3s ease;
+}
+
+.sideNavbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100dvh;
+    gap: 2rem;
+    width: 20rem ;
+    transition: width 0.3s ease;
+    background-color: var(--dark-main-container-liner-1) ;
+}
+
+
+
+.sideNavbar button {
+    border: none;
+    outline: none;
+    font-weight: 700;
+    background: none;
+    color: black;
+    width: 13rem;
+    border-radius: 3rem;
+    padding-left: 1rem;
+    height: 3rem;
+    font-size: 1.3rem;
+    cursor: pointer;
+    gap: 1rem;
+    text-align: start;
+}
+.sideNavbar .active{
+    background-color: #F1F1F1;
+    color: black;
+    transition: 500ms ease-in-out;
+}
+.flexData {
+    width: calc(100% - 20rem);
+    padding: 2rem 4rem;
+}
+.sideNavbar.collapsed {
+    width: 0;
+    padding-inline: 0;
+    overflow: hidden;
+}
+.flexData.collapsed {
+    padding: 2rem 1rem;
+    width: 100%;
+}
+
+.iconSide {
+    font-size: 4rem;
+    cursor: pointer;
+    width: 4rem;
+    color: green;
+}
+
+.ineerProfile {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ineerProfile.show {
+    display: flex;
+}
+
+.ineerProfile h2 {
+    font-size: 1.7rem;
+    text-transform: capitalize;
+}
+
+.ineerProfile button {
+    font-size: 1.4rem;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    text-transform: capitalize;
+}

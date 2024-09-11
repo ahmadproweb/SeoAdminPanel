@@ -1,0 +1,95 @@
+/* navbar.css */
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 0;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* Important for positioning .ineerProfile */
+}
+
+nav h1 {
+    font-size: 3rem;
+    text-transform: capitalize;
+    margin: 0; /* Reset margin */
+    color: black;
+}
+
+.profile > button {
+    border: none;
+    outline: none;
+    background-color: red;
+    height: 6rem;
+    width: 6rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    right: 4rem;
+}
+
+.profile img {
+    height: 6rem;
+    width: 6rem;
+    border-radius: 50%;
+}
+
+.ineerProfile {
+    position: absolute; /* Position it absolutely relative to .profile */
+    top: 5.5rem; /* Position it below the button */
+    right: -1rem;
+    background-color: var(--dark-main-container-liner-1) ;
+    border: 1px solid green;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    width: 18rem;
+    height: 10rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: black;
+    z-index: 2;
+    gap: 0.5rem;
+    opacity: 0; /* Start hidden */
+    visibility: hidden; /* Start hidden */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition */
+}
+
+.ineerProfile.show {
+    opacity: 1; /* Show with fade-in */
+    visibility: visible; /* Make it visible */
+}
+
+.ineerProfile h2 {
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    margin: 0; /* Reset margin */
+    color: black;
+    font-weight: 900;
+}
+.ineerProfile p{
+    font-size: 1.1rem;
+    text-transform: lowercase;
+}
+.ineerProfile button {
+    font-size: 1.7rem;
+    background: none;
+    font-weight: 700;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: black;
+}
+
+.ineerProfile button .icons{
+    font-size: 2rem;
+    color: green;
+}
