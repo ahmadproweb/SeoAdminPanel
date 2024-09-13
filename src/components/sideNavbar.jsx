@@ -14,6 +14,7 @@ import AccountInfo from "./AccountInfo";
 import CodeMatching from "./CodeMatching";
 import SellerPayment from "./SellerPayment";
 import DealCancel from "./DealCancel";
+import Scammers from "./Scammers";
 
 const SideNavbar = () => {
   const [activeSection, setActiveSection] = useState("UserAll");
@@ -116,6 +117,13 @@ const SideNavbar = () => {
           >
             Deal Cancel
           </button>
+          <button
+            type="button"
+            onClick={() => handleButtonClick("Scammers")}
+            className={activeSection === "Scammers" ? "active" : ""}
+          >
+           Scammers
+          </button>
         </div>
         <div className={`flexData ${isCollapsed ? "collapsed" : ""}`}>
           <Navbar
@@ -137,6 +145,7 @@ const SideNavbar = () => {
           {activeSection === "CodeMatching" && <CodeMatching />}
           {activeSection === "SellerPayment" && <SellerPayment />}
           {activeSection === "DealCancel" && <DealCancel />}
+          {activeSection === "Scammers" && <Scammers />}
         </div>
       </div>
     </>
