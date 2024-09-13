@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "../css/table.css";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel CSS
 import toast from "react-hot-toast";
 import { IoSearch } from "react-icons/io5";
+import { GiIronCross } from "react-icons/gi";
 
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function AccountSell() {
   const [data, setData] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [currentImages, setCurrentImages] = useState([]);
   const token = localStorage.getItem("token");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -32,12 +37,23 @@ function AccountSell() {
     setSearchTerm(e.target.value);
   };
 
+  const handleImagesClick = (images) => {
+    setCurrentImages(images);
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setCurrentImages([]);
+  };
+
   const filteredData = data.filter(
     (item) =>
       item.accountName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.accountType.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.Email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
 
   return (
     <>
@@ -91,14 +107,8 @@ function AccountSell() {
               <div className="cell">{item.socialLink2}</div>
               <div className="cell">{item.socialLink3}</div>
               <div className="cell">{item.socialLink4}</div>
-              <div className="cell" data-title="Profile Image">
-                <a
-                  href={item.accountImages}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Image
-                </a>
+              <div className="cell" onClick={() => handleImagesClick(item.accountImages)}>
+                Images
               </div>
               <div className="cell">{item.accountDesc}</div>
               <div className="cell">{item.monetizationEnabled}</div>
@@ -120,6 +130,20 @@ function AccountSell() {
           ))}
         </div>
       </div>
+      {showPopup && (
+        <div className="popup-overlay" onClick={handleClosePopup}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <Carousel showThumbs={false} infiniteLoop useKeyboardArrows>
+              {currentImages.map((imgUrl, imgIndex) => (
+                <div key={imgIndex}>
+                  <img src={imgUrl} alt={`Account Image ${imgIndex + 1}`} />
+                </div>
+              ))}
+            </Carousel>
+            <button className="close-button" onClick={handleClosePopup}><GiIronCross /></button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

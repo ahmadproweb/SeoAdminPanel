@@ -111,10 +111,10 @@
   .inputYoutube label {
     font-size: 1.4rem;
     text-transform: capitalize;
+    color: white;
   }
   
-  .inputYoutube input,
-  .inputYoutube textarea {
+  .inputYoutube :is( input, textarea){
     border: 1px solid var(--dark-mode-yellow);
     border-radius: 0.5rem;
     box-sizing: border-box;
@@ -130,6 +130,11 @@
     width: 100%;
     transition: all 0.25s;
   }
+  .inputYoutube input[type="file"] {
+    border: none;
+    background: none;
+}
+
   .inputYoutube input::placeholder{
   color: var(	--dark-mode-footer-btn-text);
   font-size: 1.2rem;
