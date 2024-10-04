@@ -17,6 +17,8 @@ const Scammers = () => {
     sCountry: "",
     sAccountdeal: "",
     sDealingTime: "",
+    sLink1: "",
+    sLink2: "",
     images: [],
   });
   const [loading, setLoading] = useState(false);
@@ -87,6 +89,8 @@ const Scammers = () => {
     form.append("sCountry", formData.sCountry);
     form.append("sAccountdeal", formData.sAccountdeal);
     form.append("sDealingTime", formData.sDealingTime);
+    form.append("sLink1", formData.sLink1);
+    form.append("sLink2", formData.sLink2);
     for (let i = 0; i < formData.images.length; i++) {
       form.append("images", formData.images[i]);
     }
@@ -112,6 +116,8 @@ const Scammers = () => {
         sCountry: "",
         sAccountdeal: "",
         sDealingTime: "",
+        sLink1:"",
+        sLink2:"",
         images: "",
       });
     } catch (error) {
@@ -214,6 +220,26 @@ const Scammers = () => {
                   type="date"
                   name="sDealingTime"
                   value={formData.sDealingTime}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="inputYoutube">
+                <label>Link 1 :</label>
+                <input
+                  type="url"
+                  name="sLink1"
+                  value={formData.sLink1}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="inputYoutube">
+                <label>Link 2 :</label>
+                <input
+                  type="url"
+                  name="sLink2"
+                  value={formData.sLink2}
                   onChange={handleInputChange}
                   required
                 />
