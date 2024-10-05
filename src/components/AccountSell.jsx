@@ -24,6 +24,7 @@ function AccountSell() {
       });
       const result = await response.json();
       setData(result);
+      console.log(result);
     } catch (error) {
       toast.error("Error fetching data:", error);
     }
@@ -85,6 +86,8 @@ function AccountSell() {
             <div className="cell">Account Desc</div>
             <div className="cell">Monetization Enabled</div>
             <div className="cell">Earning Method</div>
+            <div className="cell">Payment Account Verified</div>
+            <div className="cell">Documents Available</div>
             <div className="cell">Email</div>
             <div className="cell">Other Email</div>
             <div className="cell">Telegram Username</div>
@@ -111,8 +114,10 @@ function AccountSell() {
                 Images
               </div>
               <div className="cell">{item.accountDesc}</div>
-              <div className="cell">{item.monetizationEnabled}</div>
+              <div className="cell">{item.monetizationEnabled ? "Yes" : "No"}</div>
               <div className="cell">{item.earningMethod}</div>
+              <div className="cell">{item.paymentAccountVerified ? "Yes" : "No"}</div>
+              <div className="cell">{item.documentsAvailable? "Yes" : "No"}</div>
               <div className="cell">{item.Email}</div>
               <div className="cell">{item.otherEmail}</div>
               <div className="cell">{item.telegramUsername}</div>
