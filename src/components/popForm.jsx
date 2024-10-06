@@ -41,9 +41,7 @@ const PopForm = ({ togglePopup }) => {
   
     const requiredFields = [
       'accountId', 'accountType', 'accountPrice', 'accountName', 'accountUrl', 
-      'siteAge', 'accountDesc', 'monetizationEnabled', 'earningMethod', 
-      'SellerEmail', 'SellerFullName', 'MonthlyProfit', 'ProfitMargin', 
-      'PageViews', 'ProfitMultiple', 'RevenueMultiple'
+      'siteAge',  'SellerEmail', 'SellerFullName'
     ];
   
     for (let field of requiredFields) {
