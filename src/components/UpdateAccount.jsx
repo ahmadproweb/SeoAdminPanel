@@ -24,7 +24,6 @@ const UpdateForm = ({ account, onClose }) => {
     SellerFullName: account?.SellerFullName || '',
     MonthlyProfit: account?.MonthlyProfit || '',
     ProfitMargin: account?.ProfitMargin || '',
-    PageViews: account?.PageViews || '',
     ProfitMultiple: account?.ProfitMultiple || '',
     RevenueMultiple: account?.RevenueMultiple || ''
   });
@@ -70,7 +69,6 @@ const UpdateForm = ({ account, onClose }) => {
       SellerFullName: formData.SellerFullName,
       MonthlyProfit: formData.MonthlyProfit,
       ProfitMargin: formData.ProfitMargin,
-      PageViews: formData.PageViews,
       ProfitMultiple: formData.ProfitMultiple,
       RevenueMultiple: formData.RevenueMultiple
     };
@@ -115,7 +113,6 @@ const UpdateForm = ({ account, onClose }) => {
                 placeholder={`Enter ${key}`}
                 value={formData[key]}
                 onChange={handleChange}
-                required
                 disabled={key === 'accountId'}  
               />
             </div>

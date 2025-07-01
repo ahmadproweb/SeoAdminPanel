@@ -25,7 +25,6 @@ const PopForm = ({ togglePopup }) => {
     SellerFullName: '',
     MonthlyProfit: '',
     ProfitMargin: '',
-    PageViews: '',
     ProfitMultiple: '',
     RevenueMultiple: ''
   });
@@ -86,7 +85,6 @@ const PopForm = ({ togglePopup }) => {
           SellerFullName: '',
           MonthlyProfit: '',
           ProfitMargin: '',
-          PageViews: '',
           ProfitMultiple: '',
           RevenueMultiple: ''
         });
@@ -118,7 +116,6 @@ const PopForm = ({ togglePopup }) => {
               placeholder={`Enter ${key}`}
               value={formData[key]}
               onChange={handleChange}
-              required
             />
           </div>
         ))}
