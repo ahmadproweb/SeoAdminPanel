@@ -10,17 +10,20 @@ const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 const Scammers = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [isImagePopupVisible, setIsImagePopupVisible] = useState(false); // New image popup
+  const [popupImages, setPopupImages] = useState([]); // Images to display in popup
   const [formData, setFormData] = useState({
     sName: "",
     sContactNumber: "",
     sCountry: "",
+    sCnicNumber: "",
     sAccountdeal: "",
     sDealingTime: "",
     sLink1: "",
     sLink2: "",
     images: [],
   });
+
   const [loading, setLoading] = useState(false);
 
   const [scammers, setScammers] = useState([]);
@@ -45,7 +48,15 @@ const Scammers = () => {
   useEffect(() => {
     fetchScammers();
   }, []);
+  const openImagePopup = (images) => {
+    setPopupImages(images);
+    setIsImagePopupVisible(true);
+  };
 
+  const closeImagePopup = () => {
+    setPopupImages([]);
+    setIsImagePopupVisible(false);
+  };
   const fetchScammers = async () => {
     try {
       const response = await fetch(`${VITE_BASE_URL}/scammers/all`, {
@@ -77,7 +88,7 @@ const Scammers = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.images.length < 5) {
+    if (formData.images.length < 1) {
       toast.error("At least 5 images are required");
       return;
     }
@@ -86,6 +97,7 @@ const Scammers = () => {
     const form = new FormData();
     form.append("sName", formData.sName);
     form.append("sContactNumber", formData.sContactNumber);
+    form.append("sCnicNumber", formData.sCnicNumber);
     form.append("sCountry", formData.sCountry);
     form.append("sAccountdeal", formData.sAccountdeal);
     form.append("sDealingTime", formData.sDealingTime);
@@ -113,11 +125,12 @@ const Scammers = () => {
       setFormData({
         sName: "",
         sContactNumber: "",
+        sCnicNumber: "",
         sCountry: "",
         sAccountdeal: "",
         sDealingTime: "",
-        sLink1:"",
-        sLink2:"",
+        sLink1: "",
+        sLink2: "",
         images: "",
       });
     } catch (error) {
@@ -185,7 +198,7 @@ const Scammers = () => {
                 />
               </div>
               <div className="inputYoutube">
-                <label>S Contact Number :</label>
+                <label>Contact Number :</label>
                 <input
                   type="number"
                   name="sContactNumber"
@@ -195,7 +208,17 @@ const Scammers = () => {
                 />
               </div>
               <div className="inputYoutube">
-                <label>s Country :</label>
+                <label>Cnicv Number :</label>
+                <input
+                  type="number"
+                  name="sCnicNumber"
+                  value={formData.sCnicNumber}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="inputYoutube">
+                <label>Country :</label>
                 <input
                   type="text"
                   name="sCountry"
@@ -205,7 +228,7 @@ const Scammers = () => {
                 />
               </div>
               <div className="inputYoutube">
-                <label>s Account deal :</label>
+                <label>Account type :</label>
                 <input
                   type="text"
                   name="sAccountdeal"
@@ -225,7 +248,7 @@ const Scammers = () => {
                 />
               </div>
               <div className="inputYoutube">
-                <label>Link 1 :</label>
+                <label>Socail Link 1 :</label>
                 <input
                   type="url"
                   name="sLink1"
@@ -235,7 +258,7 @@ const Scammers = () => {
                 />
               </div>
               <div className="inputYoutube">
-                <label>Link 2 :</label>
+                <label>Socail Link 2 :</label>
                 <input
                   type="url"
                   name="sLink2"
@@ -273,23 +296,37 @@ const Scammers = () => {
       <div className="wrapper">
         <div className="table">
           <div className="row header">
-            <div className="cell">sName</div>
-            <div className="cell">sContactNumber</div>
-            <div className="cell">sCountry</div>
-            <div className="cell">sAccountdeal</div>
-            <div className="cell">sDealingTime</div>
-            <div className="cell">simages</div>
+            <div className="cell">Name</div>
+            <div className="cell">Contact No</div>
+            <div className="cell">Cnic</div>
+            <div className="cell">Country</div>
+            <div className="cell">Account Type</div>
+            <div className="cell">Dealing Time</div>
+            <div className="cell">images</div>
             <div className="cell">Delete</div>
           </div>
           {filteredData.map((scammer) => (
             <div key={scammer._id} className="row">
               <div className="cell">{scammer.sName}</div>
               <div className="cell">{scammer.sContactNumber}</div>
+              <div className="cell">{scammer.sCnicNumber}</div>
               <div className="cell">{scammer.sCountry}</div>
               <div className="cell">{scammer.sAccountdeal}</div>
-              <div className="cell">{scammer.sDealingTime}</div>
+              <div className="cell"> {new Date(scammer.sDealingTime).toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  })}</div>
               <div className="cell">
-                <a href={scammer.sPics[0]}>images</a>
+                <button
+                  className="view-images-btn"
+                  onClick={() => openImagePopup(scammer.sPics)}
+                >
+                  View Images
+                </button>
               </div>
               <div className="cell Icon">
                 <MdOutlineAutoDelete
@@ -300,6 +337,27 @@ const Scammers = () => {
           ))}
         </div>
       </div>
+      {isImagePopupVisible && (
+        <div className="image-popup-overlay" onClick={closeImagePopup}>
+          <div
+            className="image-popup-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Icon in Top-Right */}
+            <button className="image-popup-close" onClick={closeImagePopup}>
+              <RxCrossCircled size={28} />
+            </button>
+
+            {/* Images */}
+            <div className="image-gallery">
+              {popupImages.map((img, idx) => (
+                <img key={idx} src={img} alt={`Scammer ${idx}`} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
