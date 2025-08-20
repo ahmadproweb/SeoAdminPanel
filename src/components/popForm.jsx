@@ -1,104 +1,112 @@
 import React, { useState } from "react";
 import { RxCrossCircled } from "react-icons/rx";
 import "../css/accountStyle.css";
-import toast from 'react-hot-toast';
-const VITE_BASE_URL = import.meta.env.VITE_BASE_URL; 
+import toast from "react-hot-toast";
 
+const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const PopForm = ({ togglePopup }) => {
   const [formData, setFormData] = useState({
-    accountId: '',
-    accountType: '',
-    imagesUpload1: '',
-    imagesUpload2: '',
-    imagesUpload3: '',
-    imagesUpload4: '',
-    imagesUpload5: '',
-    accountPrice: '',
-    accountName: '',
-    accountUrl: '',
-    siteAge: '',
-    accountDesc: '',
-    monetizationEnabled: '',
-    earningMethod: '',
-    SellerEmail: '',
-    SellerFullName: '',
-    MonthlyProfit: '',
-    ProfitMargin: '',
-    ProfitMultiple: '',
-    RevenueMultiple: ''
+    accountId: "",
+    accountType: "",
+    accountPrice: "",
+    accountName: "",
+    accountUrl: "",
+    siteAge: "",
+    accountDesc: "",
+    monetizationEnabled: "",
+    earningMethod: "",
+    SellerEmail: "",
+    SellerFullName: "",
+    MonthlyProfit: "",
   });
 
+  const [images, setImages] = useState([]); // ✅ store multiple images
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  // ✅ Handle multiple image selection
+  const handleImageChange = (e) => {
+    setImages([...e.target.files]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const requiredFields = [
-      'accountId', 'accountType', 'accountPrice', 'accountName', 'accountUrl', 
-      'siteAge',  'SellerEmail', 'SellerFullName'
+      "accountType",
+      "accountPrice",
+      "accountName",
+      "accountUrl",
+      "siteAge",
+      "SellerEmail",
+      "SellerFullName",
     ];
-  
+
     for (let field of requiredFields) {
       if (!formData[field]) {
         toast.error(`${field} is required`);
         return;
       }
     }
-  
+
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${VITE_BASE_URL}/buySellList/create`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData)
+
+      // ✅ Use FormData instead of JSON.stringify
+      const formDataToSend = new FormData();
+
+      // append text fields
+      Object.keys(formData).forEach((key) => {
+        formDataToSend.append(key, formData[key]);
       });
-  
+
+      // append images (multiple)
+      images.forEach((img) => {
+        formDataToSend.append("images", img);
+      });
+
+      const response = await fetch(`${VITE_BASE_URL}/buySellList/create`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ don't set Content-Type manually
+        },
+        body: formDataToSend,
+      });
+
       const data = await response.json();
-      
+
       if (response.ok) {
-        toast.success('Account created successfully');
+        toast.success("Account created successfully");
         setFormData({
-          accountId: '',
-          accountType: '',
-          imagesUpload1: '',
-          imagesUpload2: '',
-          imagesUpload3: '',
-          imagesUpload4: '',
-          imagesUpload5: '',
-          accountPrice: '',
-          accountName: '',
-          accountUrl: '',
-          siteAge: '',
-          accountDesc: '',
-          monetizationEnabled: '',
-          earningMethod: '',
-          SellerEmail: '',
-          SellerFullName: '',
-          MonthlyProfit: '',
-          ProfitMargin: '',
-          ProfitMultiple: '',
-          RevenueMultiple: ''
+          accountId: "",
+          accountType: "",
+          accountPrice: "",
+          accountName: "",
+          accountUrl: "",
+          siteAge: "",
+          accountDesc: "",
+          monetizationEnabled: "",
+          earningMethod: "",
+          SellerEmail: "",
+          SellerFullName: "",
+          MonthlyProfit: "",
         });
+        setImages([]);
         togglePopup();
       } else {
-        toast.error(data.message || 'Failed to create account');
+        toast.error(data.message || "Failed to create account");
       }
     } catch (error) {
-      toast.error('Failed to create account');
+      toast.error("Failed to create account");
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -107,11 +115,17 @@ const PopForm = ({ togglePopup }) => {
         <RxCrossCircled className="CrossIcons" onClick={togglePopup} />
       </div>
       <form onSubmit={handleSubmit}>
-        {Object.keys(formData).map(key => (
+        {Object.keys(formData).map((key) => (
           <div className="inputYoutube" key={key}>
             <label htmlFor={key}>{key} :</label>
             <input
-              type={key.includes('Email') ? 'email' : key.includes('Url') ? 'url' : 'text'}
+              type={
+                key.includes("Email")
+                  ? "email"
+                  : key.includes("Url")
+                  ? "url"
+                  : "text"
+              }
               id={key}
               placeholder={`Enter ${key}`}
               value={formData[key]}
@@ -119,8 +133,23 @@ const PopForm = ({ togglePopup }) => {
             />
           </div>
         ))}
+
+        {/* ✅ Image upload field */}
         <div className="inputYoutube">
-          <button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Create'}</button>
+          <label htmlFor="images">Upload Images (max 5):</label>
+          <input
+            type="file"
+            id="images"
+            multiple
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
+
+        <div className="inputYoutube">
+          <button type="submit" disabled={loading}>
+            {loading ? "Creating..." : "Create"}
+          </button>
         </div>
       </form>
     </>

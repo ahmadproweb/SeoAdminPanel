@@ -24,7 +24,6 @@ function AccountSell() {
       });
       const result = await response.json();
       setData(result);
-      console.log(result);
     } catch (error) {
       toast.error("Error fetching data:", error);
     }
