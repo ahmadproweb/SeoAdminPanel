@@ -203,7 +203,18 @@
     font-size: 1.2rem;
     cursor: pointer;
   }
-  
+  .button-hello{
+  position: relative;
+    border: none;
+    outline: none;
+    background: #FDB224;
+    color: aliceblue;
+    padding: 0.3rem 1rem;
+    border-radius: 0.5rem;
+    text-transform: capitalize;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
 
 
 
@@ -320,3 +331,52 @@
     font-size: 1.1rem;
     cursor: pointer;
   }
+
+  /* Image Modal Overlay */
+.imageModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* Modal content wrapper */
+.imageModalContent {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Close button */
+/* Close button stays at top-right of viewport */
+.imageModalClose {
+  position: fixed; /* changed from absolute to fixed */
+  top: 20px;
+  right: 20px;
+  font-size: 2.2rem;
+  color: white;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Modal images */
+.modalImage {
+  max-width: 400px;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
