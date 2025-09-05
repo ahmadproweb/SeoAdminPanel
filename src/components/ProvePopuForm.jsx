@@ -1,24 +1,14 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { RxCrossCircled } from "react-icons/rx";
 import "../css/accountStyle.css";
 import toast from "react-hot-toast";
 
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const PopForm = ({ togglePopup }) => {
+const ProvePopuForm = ({ togglePopup, onCreate  }) => {
   const [formData, setFormData] = useState({
-    accountId: "",
-    accountType: "",
-    accountPrice: "",
-    accountName: "",
-    accountUrl: "",
-    siteAge: "",
-    accountDesc: "",
-    monetizationEnabled: "",
-    earningMethod: "",
-    SellerEmail: "",
-    SellerFullName: "",
-    MonthlyProfit: "",
+    name: "",
+    desc: "",
   });
 
   const [images, setImages] = useState([]); // ✅ store multiple images
@@ -30,34 +20,31 @@ const PopForm = ({ togglePopup }) => {
 
   // ✅ Handle multiple image selection
   const handleImageChange = (e) => {
-    setImages([...e.target.files]);
+    const selectedFiles = Array.from(e.target.files);
+    if (selectedFiles.length > 10) {
+      toast.error("Maximum 10 images allowed");
+      return;
+    }
+    setImages(selectedFiles);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const requiredFields = [
-      "accountType",
-      "accountPrice",
-      "accountName",
-      "accountUrl",
-      "siteAge",
-      "SellerEmail",
-      "SellerFullName",
-    ];
+    if (!formData.name || !formData.desc) {
+      toast.error("Please fill all fields");
+      return;
+    }
 
-    for (let field of requiredFields) {
-      if (!formData[field]) {
-        toast.error(`${field} is required`);
-        return;
-      }
+    if (images.length === 0) {
+      toast.error("Please select at least one image");
+      return;
     }
 
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
 
-      // ✅ Use FormData instead of JSON.stringify
       const formDataToSend = new FormData();
 
       // append text fields
@@ -65,15 +52,15 @@ const PopForm = ({ togglePopup }) => {
         formDataToSend.append(key, formData[key]);
       });
 
-      // append images (multiple)
+      // append images (multiple) using the correct backend field name
       images.forEach((img) => {
-        formDataToSend.append("images", img);
+        formDataToSend.append("proveImages", img);
       });
 
-      const response = await fetch(`${VITE_BASE_URL}/buySellList/create`, {
+      const response = await fetch(`${VITE_BASE_URL}/api/prove/create`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ don't set Content-Type manually
+          Authorization: `Bearer ${token}`,
         },
         body: formDataToSend,
       });
@@ -81,28 +68,16 @@ const PopForm = ({ togglePopup }) => {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Account created successfully");
-        setFormData({
-          accountId: "",
-          accountType: "",
-          accountPrice: "",
-          accountName: "",
-          accountUrl: "",
-          siteAge: "",
-          accountDesc: "",
-          monetizationEnabled: "",
-          earningMethod: "",
-          SellerEmail: "",
-          SellerFullName: "",
-          MonthlyProfit: "",
-        });
-        setImages([]);
-        togglePopup();
+        toast.success("Prove created successfully");
+        setFormData({ name: "", desc: "" });
+          setImages([]);
+    togglePopup();
+    onCreate?.(); 
       } else {
-        toast.error(data.message || "Failed to create account");
+        toast.error(data.message || "Failed to create prove");
       }
     } catch (error) {
-      toast.error("Failed to create account");
+      toast.error("Failed to create prove");
     } finally {
       setLoading(false);
     }
@@ -111,7 +86,7 @@ const PopForm = ({ togglePopup }) => {
   return (
     <>
       <div className="youtubeFormFill">
-        <h1>Fill Form</h1>
+        <h1>Fill Form Prove</h1>
         <RxCrossCircled className="CrossIcons" onClick={togglePopup} />
       </div>
       <form onSubmit={handleSubmit}>
@@ -119,13 +94,7 @@ const PopForm = ({ togglePopup }) => {
           <div className="inputYoutube" key={key}>
             <label htmlFor={key}>{key} :</label>
             <input
-              type={
-                key.includes("Email")
-                  ? "email"
-                  : key.includes("Url")
-                  ? "url"
-                  : "text"
-              }
+              type="text"
               id={key}
               placeholder={`Enter ${key}`}
               value={formData[key]}
@@ -136,7 +105,7 @@ const PopForm = ({ togglePopup }) => {
 
         {/* ✅ Image upload field */}
         <div className="inputYoutube">
-          <label htmlFor="images">Upload Images (max 5):</label>
+          <label htmlFor="images">Upload Images (max 10):</label>
           <input
             type="file"
             id="images"
@@ -156,4 +125,4 @@ const PopForm = ({ togglePopup }) => {
   );
 };
 
-export default PopForm;
+export default ProvePopuForm;

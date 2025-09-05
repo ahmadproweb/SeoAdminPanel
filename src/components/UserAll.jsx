@@ -9,20 +9,37 @@ function UserAll() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const token = localStorage.getItem("token");
+const DataFetch = async () => {
+  try {
+    const response = await fetch(`${VITE_BASE_URL}/api/users/all`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  const DataFetch = async () => {
-    try {
-      const response = await fetch(`${VITE_BASE_URL}/api/users/all`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      toast.error("Error fetching data:", error);
+    if (!response.ok) {
+      const errorMsg = await response.text();
+      toast.error(`Error fetching data: ${response.status} - ${errorMsg}`);
+      setData([]); // fallback to empty array
+      return;
     }
-  };
+
+    const result = await response.json();
+
+    // Ensure result is an array
+    if (Array.isArray(result)) {
+      setData(result);
+    } else {
+      console.error("Unexpected API response:", result);
+      setData([]); // prevent .filter crash
+    }
+  } catch (error) {
+    toast.error("Error fetching data");
+    console.error(error);
+    setData([]); // prevent crash
+  }
+};
+
 
   useEffect(() => {
     DataFetch();

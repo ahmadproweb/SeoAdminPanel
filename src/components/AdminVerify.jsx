@@ -33,7 +33,7 @@ function AdminVerify() {
       const data = await response.json();
       if (response.ok) {
         toast.success(data.message);
-        navigate("/login");
+        navigate("/signIn");
       } else {
         toast.error(data.message || "Something went wrong");
       }

@@ -4,10 +4,10 @@ import "../css/accountStyle.css";
 import toast from 'react-hot-toast';
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL; 
 
-const UpdateForm = ({ account, onClose }) => {
+const ProveUpdateAccount = ({ account, onClose }) => {
   const [formData, setFormData] = useState({
-    accountId: account?.accountId || '',
-    accountType: account?.accountType || '',
+    name: account?.name || '',
+    desc: account?.desc || '',
     imagesUpload1: account?.imagesUpload1 || '',
     imagesUpload2: account?.imagesUpload2 || '',
     imagesUpload3: account?.imagesUpload3 || '',
@@ -126,4 +126,4 @@ const UpdateForm = ({ account, onClose }) => {
   );
 };
 
-export default UpdateForm;
+export default ProveUpdateAccount;

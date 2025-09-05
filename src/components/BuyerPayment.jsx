@@ -14,13 +14,14 @@ function BuyerPayment() {
 
   const DataFetch = async () => {
     try {
-      const response = await fetch(`${VITE_BASE_URL}/payment/all`, {
+      const response = await fetch(`${VITE_BASE_URL}/stripe/allUsers`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       const result = await response.json();
       setData(result);
+      // console.log(result);
     } catch (error) {
       toast.error("Error fetching data:", error);
     }
@@ -35,8 +36,9 @@ function BuyerPayment() {
 
   const filteredData = data.filter((item) =>
     item.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.transactionId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.email.toLowerCase().includes(searchTerm.toLowerCase())
+    item.emailAddress.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.accountId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.accountType.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -45,7 +47,7 @@ function BuyerPayment() {
     <div className="inputMain">
       <input
         type="text"
-        placeholder="Search by Full Name || Id or Email"
+        placeholder="Search by Full Name || Id , Type Email"
         value={searchTerm}
         onChange={handleSearch}
       />
@@ -59,14 +61,15 @@ function BuyerPayment() {
         <div className="row header">
           <div className="cell">Full Name</div>
           <div className="cell">Email</div>
-          <div className="cell">Admin Email</div>
           <div className="cell">Seller Email</div>
-          <div className="cell">Total Price</div>
-          <div className="cell">Transaction Id</div>
-          <div className="cell">Transaction Date</div>
-          <div className="cell">Payment Method</div>
-          <div className="cell">Payment Pic</div>
-          <div className="cell">Contact Number</div>
+          <div className="cell">Id</div>
+          <div className="cell">Type</div>
+          <div className="cell">Name</div>
+          <div className="cell">Price</div>
+          <div className="cell">Tax</div>
+          <div className="cell">Cents</div>
+          <div className="cell">Address</div>
+          <div className="cell">Country</div>
           <div className="cell">Created At</div>
         </div>
         {filteredData.map((item, index) => (
@@ -75,37 +78,34 @@ function BuyerPayment() {
               {item.fullName}
             </div>
             <div className="cell" >
-              {item.email}
-            </div>
-            <div className="cell" >
-              {item.adminEmail}
+              {item.emailAddress}
             </div>
             <div className="cell" >
               {item.sellerEmail}
             </div>
             <div className="cell" >
+              {item.accountId}
+            </div>
+            <div className="cell" >
+              {item.accountType}
+            </div>
+            <div className="cell" >
+              {item.accountName}
+            </div>
+            <div className="cell" >
+              {formatCoins(item.accountPrice)}
+            </div>
+            <div className="cell" >
               {formatCoins(item.totalPrice)}
             </div>
             <div className="cell" >
-              {item.transactionId}
+              {item.amount}
             </div>
             <div className="cell" >
-              {item.transactionDate}
+              {item.address}
             </div>
             <div className="cell" >
-              {item.paymentMethod}
-            </div>
-            <div className="cell" data-title="Profile Image">
-              <a
-                href={item.paymentPic}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View Image
-              </a>
-            </div>
-            <div className="cell" >
-              {item.contactNumber}
+              {item.country}
             </div>
             <div className="cell">{new Date(item.createdAt).toLocaleDateString()}</div>
           </div>
